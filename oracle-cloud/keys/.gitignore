@@ -1,0 +1,6 @@
+# Abaikan semua file di folder keys kecuali file dokumentasi & template
+*
+!.gitignore
+!.gitkeep
+!*.example
+!README.md

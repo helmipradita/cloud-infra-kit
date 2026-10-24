@@ -1,0 +1,31 @@
+# OS & Editors
+.DS_Store
+Thumbs.db
+*.swp
+*~
+*.log
+
+# Credentials & Keys
+keys/*
+!keys/.gitignore
+!keys/.gitkeep
+!keys/*.example
+!keys/README.md
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraformrc
+terraform.rc
+
+# Node / Dependencies
+node_modules/
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example

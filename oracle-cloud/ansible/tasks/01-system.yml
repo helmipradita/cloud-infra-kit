@@ -1,0 +1,55 @@
+---
+# ==============================================================================
+# Task: 01-system.yml (Swap 4GB & Tool Operasional Host)
+# ==============================================================================
+
+- name: Check if swapfile exists
+  ansible.builtin.stat:
+    path: /swapfile
+  register: swap_file_stat
+
+- name: Create 4GB swapfile
+  ansible.builtin.command: fallocate -l 4G /swapfile
+  when: not swap_file_stat.stat.exists
+
+- name: Set permissions on swapfile
+  ansible.builtin.file:
+    path: /swapfile
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Format swapfile
+  ansible.builtin.command: mkswap /swapfile
+  when: not swap_file_stat.stat.exists
+
+- name: Enable swapfile
+  ansible.builtin.command: swapon /swapfile
+  when: not swap_file_stat.stat.exists
+  failed_when: false
+
+- name: Add swapfile to fstab
+  ansible.builtin.mount:
+    name: none
+    src: /swapfile
+    fstype: swap
+    opts: sw
+    state: present
+
+- name: Update apt cache and install base packages
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    name:
+      - curl
+      - wget
+      - git
+      - jq
+      - unzip
+      - tree
+      - ca-certificates
+      - gnupg
+      - lsb-release
+      - unattended-upgrades
+      - apt-listchanges
+    state: present
