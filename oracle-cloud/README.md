@@ -82,7 +82,7 @@ docker compose version
 
 Start the starter test container:
 ```bash
-cd ~/stacks
+cd ~/services
 docker compose up -d
 curl http://localhost
 ```

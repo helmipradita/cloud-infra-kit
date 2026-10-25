@@ -1,0 +1,21 @@
+---
+- name: Ensure target services directory exists
+  ansible.builtin.file:
+    path: "/home/{{ target_user }}/services"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: Sync starter services definitions
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../services/"
+    dest: "/home/{{ target_user }}/services/"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: 'preserve'
+
+- name: Start starter services
+  ansible.builtin.command:
+    cmd: "docker compose up -d"
+    chdir: "/home/{{ target_user }}/services"

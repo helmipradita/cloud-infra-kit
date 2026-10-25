@@ -6,35 +6,15 @@
     target_user: "ubuntu"
     target_home: "/home/ubuntu"
 
-  tasks:
-    - name: Configure System Swap (4GB) & Base Packages
-      ansible.builtin.include_tasks: tasks/01-system.yml
+  roles:
+    - role: system
       tags: [system, base]
 
-    - name: Apply SSH Hardening & Fail2ban (nftables)
-      ansible.builtin.include_tasks: tasks/02-security.yml
+    - role: security
       tags: [security, hardening]
 
-    - name: Install Docker CE ARM64 & Compose Plugin
-      ansible.builtin.include_tasks: tasks/03-docker.yml
+    - role: docker
       tags: [docker]
 
-    - name: Flush handlers
-      ansible.builtin.meta: flush_handlers
-      tags: [always]
-
-  handlers:
-    - name: Restart SSH
-      ansible.builtin.service:
-        name: ssh
-        state: restarted
-
-    - name: Restart Fail2ban
-      ansible.builtin.service:
-        name: fail2ban
-        state: restarted
-
-    - name: Restart Docker
-      ansible.builtin.service:
-        name: docker
-        state: restarted
+    - role: services
+      tags: [services, deploy]
